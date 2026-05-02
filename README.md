@@ -18,6 +18,9 @@ python slippage.py
   - `raw_slip_usdc`, `raw_slip_pct` — Binance 마크가 그대로를 기준으로 한 슬리피지
   - `adj_slip_usdc`, `adj_slip_pct` — 코인별 중앙값 베이시스를 제거한 슬리피지 (Variational 의 구조적 디스카운트/프리미엄 영향 제거)
   - `median_basis_pct` — Variational 가 Binance 대비 평균 얼마나 싸게(혹은 비싸게) 거래되는지
+  - `half_spread_usdc` — `|executed - adj_mark| * qty` 누적 (체결가가 공정가에서 벗어난 절대량)
+  - `avg_half_spread_pct` — 거래대금 가중 평균 half-spread 비율 = `half_spread_usdc / total_notional_usdc`
+  - `avg_full_spread_pct` — 추정 평균 bid-ask 스프레드 (= 2 × half-spread). 사용자가 항상 테이커였다고 가정한 상한선
   - `market` — futures / spot / unsupported
 - `slippage_per_trade.csv` — 체결별 상세
 

@@ -246,6 +246,12 @@ def main() -> int:
     enriched["adj_slip_per_unit"] = (enriched["price"] - enriched["adj_mark"]) * enriched["side_sign"]
     enriched["adj_slip_usdc"] = enriched["adj_slip_per_unit"] * enriched["qty"]
 
+    # Effective half-spread paid per fill: |executed - adj_mark|.
+    # Notional-weighted average gives the average half-spread paid;
+    # double it for the implied full bid-ask spread on Variational.
+    enriched["half_spread_per_unit"] = (enriched["price"] - enriched["adj_mark"]).abs()
+    enriched["half_spread_usdc"] = enriched["half_spread_per_unit"] * enriched["qty"]
+
     # Per-coin summary
     grp = enriched.groupby("underlying")
     summary = pd.DataFrame({
@@ -257,9 +263,12 @@ def main() -> int:
         "median_basis_pct": grp["basis_pct"].median(),
         "raw_slip_usdc": grp["raw_slip_usdc"].sum(),
         "adj_slip_usdc": grp["adj_slip_usdc"].sum(),
+        "half_spread_usdc": grp["half_spread_usdc"].sum(),
     })
     summary["raw_slip_pct"] = summary["raw_slip_usdc"] / summary["total_notional_usdc"]
     summary["adj_slip_pct"] = summary["adj_slip_usdc"] / summary["total_notional_usdc"]
+    summary["avg_half_spread_pct"] = summary["half_spread_usdc"] / summary["total_notional_usdc"]
+    summary["avg_full_spread_pct"] = 2 * summary["avg_half_spread_pct"]
     summary["market"] = summary.index.map(market_per_coin)
     summary = summary.sort_values("total_notional_usdc", ascending=False)
 
@@ -269,6 +278,7 @@ def main() -> int:
         "basis", "basis_pct", "notional",
         "raw_slip_per_unit", "raw_slip_usdc",
         "adj_mark", "adj_slip_per_unit", "adj_slip_usdc",
+        "half_spread_per_unit", "half_spread_usdc",
     ]
     enriched[cols_out].to_csv(OUT_PER_TRADE, index=False)
     summary.to_csv(OUT_PER_COIN)
@@ -276,12 +286,12 @@ def main() -> int:
     # Console report
     print("\n=== Per-coin summary ===")
     show = summary.copy()
-    show["raw_slip_pct"] = (show["raw_slip_pct"] * 100).round(4).astype(str) + "%"
-    show["adj_slip_pct"] = (show["adj_slip_pct"] * 100).round(4).astype(str) + "%"
-    show["median_basis_pct"] = (show["median_basis_pct"] * 100).round(4).astype(str) + "%"
-    show["total_notional_usdc"] = show["total_notional_usdc"].round(2)
-    show["raw_slip_usdc"] = show["raw_slip_usdc"].round(2)
-    show["adj_slip_usdc"] = show["adj_slip_usdc"].round(2)
+    for c in ("raw_slip_pct", "adj_slip_pct", "median_basis_pct",
+              "avg_half_spread_pct", "avg_full_spread_pct"):
+        show[c] = (show[c] * 100).round(4).astype(str) + "%"
+    for c in ("total_notional_usdc", "raw_slip_usdc",
+              "adj_slip_usdc", "half_spread_usdc"):
+        show[c] = show[c].round(2)
     print(show.to_string())
     print(f"\nwrote: {OUT_PER_COIN}")
     print(f"wrote: {OUT_PER_TRADE}")
