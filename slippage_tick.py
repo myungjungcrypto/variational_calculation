@@ -43,6 +43,7 @@ import sys
 import time
 import urllib.request
 import zipfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -63,6 +64,7 @@ ARCHIVE_BASE = "https://data.binance.vision/data/futures/um/daily/aggTrades"
 USER_AGENT = "Mozilla/5.0 slippage-tick-analysis"
 MAX_GAP_MS = 1_000      # mark fills as unmatched if no tick within 1s
 BIG_SELL_USDC = 200_000 # bucket threshold for "big sells"
+DOWNLOAD_WORKERS = 8    # concurrent daily-file downloads
 
 
 # ---------------------------------------------------------------------------
@@ -133,7 +135,8 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
 
 
 def load_ticks(symbol: str, day_start: datetime, day_end: datetime) -> pd.DataFrame:
-    """Concatenate daily tick archives covering [day_start, day_end]."""
+    """Concatenate daily tick archives covering [day_start, day_end].
+    Assumes prefetch_all() has already downloaded everything; this just reads cache."""
     parts = []
     cur = datetime(day_start.year, day_start.month, day_start.day, tzinfo=timezone.utc)
     end = datetime(day_end.year, day_end.month, day_end.day, tzinfo=timezone.utc)
@@ -146,6 +149,46 @@ def load_ticks(symbol: str, day_start: datetime, day_end: datetime) -> pd.DataFr
         return pd.DataFrame(columns=["transact_time", "price"])
     out = pd.concat(parts, ignore_index=True)
     return out.sort_values("transact_time").reset_index(drop=True)
+
+
+def _cache_path(symbol: str, day: datetime) -> Path:
+    return TICK_DIR / symbol / f"{symbol}-aggTrades-{day.strftime('%Y-%m-%d')}.csv.gz"
+
+
+def prefetch_all(trades: pd.DataFrame, workers: int = DOWNLOAD_WORKERS) -> None:
+    """Download every (symbol, day) zip in parallel, skipping cached files."""
+    tasks: list[tuple[str, datetime]] = []
+    for coin, sub in trades.groupby("underlying"):
+        sym = symbol_for(coin)
+        first = sub["created_at"].min()
+        last = sub["created_at"].max()
+        cur = datetime(first.year, first.month, first.day, tzinfo=timezone.utc)
+        end = datetime(last.year, last.month, last.day, tzinfo=timezone.utc)
+        while cur <= end:
+            if not _cache_path(sym, cur).exists():
+                tasks.append((sym, cur))
+            cur += timedelta(days=1)
+
+    if not tasks:
+        print("all daily files already cached")
+        return
+
+    print(f"downloading {len(tasks):,} daily files ({workers} workers in parallel)...")
+    t0 = time.time()
+    done = 0
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = {ex.submit(fetch_day, sym, d): (sym, d) for sym, d in tasks}
+        for f in as_completed(futures):
+            done += 1
+            sym, d = futures[f]
+            try:
+                f.result()
+            except Exception as e:  # noqa: BLE001
+                print(f"  [warn] {sym} {d.date()}: {e}")
+            if done % 10 == 0 or done == len(tasks):
+                rate = done / max(time.time() - t0, 1e-3)
+                eta = (len(tasks) - done) / max(rate, 1e-3)
+                print(f"  {done:>4}/{len(tasks)}  {rate:.1f} file/s  eta {eta/60:.1f} min")
 
 
 def symbol_for(coin: str) -> str:
@@ -330,6 +373,7 @@ def main() -> int:
     trades = trades[~trades["underlying"].isin(skip)].reset_index(drop=True)
     print(f"trades: {len(trades):,}  coins: {sorted(trades['underlying'].unique())}")
 
+    prefetch_all(trades)
     enriched = compute(trades)
     enriched = add_slippage(enriched)
 
