@@ -8,7 +8,7 @@
 ## 사용
 
 ```bash
-pip install pandas numpy pyarrow
+pip install pandas numpy
 python slippage_tick.py        # 권장
 # 또는
 python slippage.py             # 1분봉 버전
@@ -28,7 +28,7 @@ python slippage.py             # 1분봉 버전
 - `slippage_tick_asymmetry.csv` — 코인 × side 단위 비대칭 표
 - `slippage_tick_size_buckets.csv` — `notional ≥ $200K` (큰 거래) 버킷 분리
 
-처음 실행 시 daily aggTrades zip 다운로드 (수~수십 GB). `ticks/<SYMBOL>/<SYMBOL>-aggTrades-YYYY-MM-DD.parquet` 로 캐시.
+처음 실행 시 daily aggTrades zip 다운로드 (수~수십 GB). `ticks/<SYMBOL>/<SYMBOL>-aggTrades-YYYY-MM-DD.csv.gz` 로 캐시.
 
 ## 1분봉 버전 (`slippage.py`)
 

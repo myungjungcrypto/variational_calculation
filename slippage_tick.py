@@ -96,9 +96,10 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
     tag = day.strftime("%Y-%m-%d")
     sym_dir = TICK_DIR / symbol
     sym_dir.mkdir(exist_ok=True)
-    cache = sym_dir / f"{symbol}-aggTrades-{tag}.parquet"
+    cache = sym_dir / f"{symbol}-aggTrades-{tag}.csv.gz"
     if cache.exists():
-        return pd.read_parquet(cache)
+        df = pd.read_csv(cache, dtype={"price": "float64", "transact_time": "int64"})
+        return df
 
     url = f"{ARCHIVE_BASE}/{symbol}/{symbol}-aggTrades-{tag}.zip"
     zip_path = sym_dir / f"{symbol}-aggTrades-{tag}.zip"
@@ -127,7 +128,7 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
     finally:
         zip_path.unlink(missing_ok=True)
     df = df.sort_values("transact_time").reset_index(drop=True)
-    df.to_parquet(cache, index=False)
+    df.to_csv(cache, index=False, compression="gzip")
     return df
 
 
