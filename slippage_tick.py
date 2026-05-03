@@ -109,14 +109,21 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
         with zipfile.ZipFile(zip_path) as zf:
             name = zf.namelist()[0]
             with zf.open(name) as fh:
-                df = pd.read_csv(
-                    fh,
-                    header=None,
-                    names=["agg_id", "price", "qty", "first_id", "last_id",
-                           "transact_time", "is_buyer_maker"],
-                    usecols=["price", "transact_time"],
-                    dtype={"price": "float64", "transact_time": "int64"},
-                )
+                first = fh.readline().decode("ascii", errors="replace").strip()
+            has_header = not first.split(",")[0].lstrip("-").isdigit()
+            with zf.open(name) as fh:
+                if has_header:
+                    df = pd.read_csv(fh, usecols=["price", "transact_time"])
+                else:
+                    df = pd.read_csv(
+                        fh,
+                        header=None,
+                        names=["agg_id", "price", "qty", "first_id", "last_id",
+                               "transact_time", "is_buyer_maker"],
+                        usecols=["price", "transact_time"],
+                    )
+            df["price"] = df["price"].astype("float64")
+            df["transact_time"] = df["transact_time"].astype("int64")
     finally:
         zip_path.unlink(missing_ok=True)
     df = df.sort_values("transact_time").reset_index(drop=True)
