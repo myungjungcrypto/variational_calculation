@@ -1,17 +1,36 @@
 # Variational 슬리피지 분석
 
-`slippage.py` 는 Variational 체결 내역(`export-trades.csv`)을 같은 시각의 Binance 1분봉 가격과 비교해 **코인별 슬리피지 손실 (수수료 등가) 비율** 을 계산합니다.
+두 가지 분석 스크립트가 있습니다:
+
+- **`slippage_tick.py` (권장)** — Binance USDT-Perp **aggTrades 틱** (~50ms 해상도) 기준. `data.binance.vision` 공개 아카이브 사용. 이게 정확함.
+- **`slippage.py`** — Binance 1분봉 보간 기준. 빠르지만 ±5~10 bp 노이즈 있음.
 
 ## 사용
 
 ```bash
-pip install pandas
-python slippage.py
+pip install pandas numpy pyarrow
+python slippage_tick.py        # 권장
+# 또는
+python slippage.py             # 1분봉 버전
 ```
 
-처음 실행하면 코인별로 Binance Futures(USDT-M) 또는 Spot 1분봉을 다운로드해서 `klines/` 디렉터리에 캐시합니다 (총 100MB 안팎). 두번째부터는 캐시를 사용해 즉시 계산.
+## 틱 버전 (`slippage_tick.py`)
 
-## 출력 파일
+`Variationalca.xlsx` 의 audit 방법론 그대로:
+
+1. 각 fill 의 `transact_time` 에 가장 가까운 Binance perp aggTrade 검색 (1초 이내 매칭)
+2. signed slippage (bps): `sign × (fill_price − reference) / reference × 10000`, sign=+1(buy)/-1(sell), 양수=불리
+3. 코인별/방향별/사이즈별 가중평균 + adverse 비율
+
+출력:
+- `slippage_tick_per_coin.csv` — 코인별 가중 bps + buy/sell bps + 매도 adverse 비율
+- `slippage_tick_per_trade.csv` — 체결별 reference price, gap_ms, slip_bps, slip_usd
+- `slippage_tick_asymmetry.csv` — 코인 × side 단위 비대칭 표
+- `slippage_tick_size_buckets.csv` — `notional ≥ $200K` (큰 거래) 버킷 분리
+
+처음 실행 시 daily aggTrades zip 다운로드 (수~수십 GB). `ticks/<SYMBOL>/<SYMBOL>-aggTrades-YYYY-MM-DD.parquet` 로 캐시.
+
+## 1분봉 버전 (`slippage.py`)
 
 - `slippage_per_coin.csv` — 코인별 요약
   - `total_notional_usdc` 총 거래대금

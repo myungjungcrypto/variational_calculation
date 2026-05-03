@@ -1,3 +1,6 @@
 klines/
+ticks/
 __pycache__/
 *.pyc
+slippage_tick_*.csv
+slippage_per_*.csv
