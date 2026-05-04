@@ -9,10 +9,15 @@
 
 ```bash
 pip install pandas numpy
-python slippage_tick.py        # 권장
-# 또는
-python slippage.py             # 1분봉 버전
+python slippage_tick.py                       # default: export-trades.csv
+python slippage_tick.py export-trades_d.csv   # 다른 trades 파일
+
+python trade_pnl.py                           # default
+python trade_pnl.py export-trades_d.csv       # 다른 trades 파일
 ```
+
+입력 파일이 `export-trades_d.csv` 면 출력은 `slippage_tick_per_coin_d.csv`,
+`trade_pnl_d.csv` 처럼 자동으로 `_d` suffix 가 붙습니다.
 
 ## 틱 버전 (`slippage_tick.py`)
 

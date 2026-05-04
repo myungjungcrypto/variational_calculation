@@ -55,10 +55,23 @@ TRADES_CSV = ROOT / "export-trades.csv"
 TICK_DIR = ROOT / "ticks"
 TICK_DIR.mkdir(exist_ok=True)
 
-OUT_PER_COIN = ROOT / "slippage_tick_per_coin.csv"
-OUT_PER_TRADE = ROOT / "slippage_tick_per_trade.csv"
-OUT_ASYM = ROOT / "slippage_tick_asymmetry.csv"
-OUT_SIZE = ROOT / "slippage_tick_size_buckets.csv"
+
+def _output_paths(suffix: str) -> dict:
+    return {
+        "per_coin":  ROOT / f"slippage_tick_per_coin{suffix}.csv",
+        "per_trade": ROOT / f"slippage_tick_per_trade{suffix}.csv",
+        "asym":      ROOT / f"slippage_tick_asymmetry{suffix}.csv",
+        "size":      ROOT / f"slippage_tick_size_buckets{suffix}.csv",
+    }
+
+
+def _suffix_from(path: Path) -> str:
+    """Derive an output suffix from the trades filename.
+    export-trades.csv -> '', export-trades_d.csv -> '_d', etc."""
+    stem = path.stem
+    if stem.startswith("export-trades"):
+        return stem[len("export-trades"):]
+    return f"_{stem}"
 
 ARCHIVE_BASE = "https://data.binance.vision/data/futures/um/daily/aggTrades"
 USER_AGENT = "Mozilla/5.0 slippage-tick-analysis"
@@ -363,12 +376,16 @@ def overall_line(df: pd.DataFrame) -> str:
 # Main
 # ---------------------------------------------------------------------------
 
-def main() -> int:
-    if not TRADES_CSV.exists():
-        print(f"missing: {TRADES_CSV}")
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv[1:] if argv is None else argv
+    trades_csv = ROOT / args[0] if args else TRADES_CSV
+    if not trades_csv.exists():
+        print(f"missing: {trades_csv}")
         return 1
+    out = _output_paths(_suffix_from(trades_csv))
+    print(f"input: {trades_csv.name}  output suffix: '{_suffix_from(trades_csv)}'")
 
-    trades = pd.read_csv(TRADES_CSV)
+    trades = pd.read_csv(trades_csv)
     trades = trades[trades["status"] == "confirmed"].copy()
     trades["created_at"] = pd.to_datetime(trades["created_at"], utc=True, format="ISO8601")
     trades["ts_ms"] = (trades["created_at"].astype("int64") // 1_000_000).astype("int64")
@@ -389,10 +406,10 @@ def main() -> int:
     asym = asymmetry_table(enriched)
     sizes = size_buckets(enriched)
 
-    enriched.to_csv(OUT_PER_TRADE, index=False)
-    per_coin.to_csv(OUT_PER_COIN, index=False)
-    asym.to_csv(OUT_ASYM, index=False)
-    sizes.to_csv(OUT_SIZE, index=False)
+    enriched.to_csv(out["per_trade"], index=False)
+    per_coin.to_csv(out["per_coin"], index=False)
+    asym.to_csv(out["asym"], index=False)
+    sizes.to_csv(out["size"], index=False)
 
     print("\n=== Per coin ===")
     show = per_coin.copy()
@@ -422,7 +439,8 @@ def main() -> int:
 
     print()
     print(overall_line(enriched))
-    print(f"\nwrote: {OUT_PER_COIN}\nwrote: {OUT_PER_TRADE}\nwrote: {OUT_ASYM}\nwrote: {OUT_SIZE}")
+    for k, p in out.items():
+        print(f"wrote: {p}")
     return 0
 
 

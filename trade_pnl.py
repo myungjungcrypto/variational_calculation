@@ -46,12 +46,15 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 TRADES_CSV = ROOT / "export-trades.csv"
 PNL_CSV = ROOT / "export-pnl.csv"
-SLIP_TICK_CSV = ROOT / "slippage_tick_per_trade.csv"
-
-OUT_PER_TRADE = ROOT / "trade_pnl.csv"
-OUT_SUMMARY = ROOT / "trade_pnl_summary.csv"
 
 PNL_MATCH_WINDOW_MS = 60_000  # match closing fills to realized_pnl within 60s
+
+
+def _suffix_from(path: Path) -> str:
+    stem = path.stem
+    if stem.startswith("export-trades"):
+        return stem[len("export-trades"):]
+    return f"_{stem}"
 
 
 def fifo_pnl(trades: pd.DataFrame) -> pd.DataFrame:
@@ -165,12 +168,19 @@ def match_platform_pnl(trades: pd.DataFrame, pnl: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def main() -> int:
-    if not TRADES_CSV.exists() or not PNL_CSV.exists():
-        print("missing trades or pnl csv")
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv[1:] if argv is None else argv
+    trades_csv = ROOT / args[0] if args else TRADES_CSV
+    if not trades_csv.exists():
+        print(f"missing: {trades_csv}")
         return 1
+    suffix = _suffix_from(trades_csv)
+    out_per_trade = ROOT / f"trade_pnl{suffix}.csv"
+    out_summary = ROOT / f"trade_pnl_summary{suffix}.csv"
+    slip_tick_csv = ROOT / f"slippage_tick_per_trade{suffix}.csv"
+    print(f"input: {trades_csv.name}  output suffix: '{suffix}'")
 
-    trades = pd.read_csv(TRADES_CSV)
+    trades = pd.read_csv(trades_csv)
     trades = trades[trades["status"] == "confirmed"].copy()
     trades["created_at"] = pd.to_datetime(trades["created_at"], utc=True, format="ISO8601")
     trades["ts_ms"] = (trades["created_at"].astype("int64") // 1_000_000).astype("int64")
@@ -179,30 +189,33 @@ def main() -> int:
     trades["notional"] = trades["price"] * trades["qty"]
     trades = trades.reset_index(drop=True)
 
-    pnl = pd.read_csv(PNL_CSV)
-    pnl = pnl[pnl["transfer_type"] == "realized_pnl"].copy()
-    pnl["created_at"] = pd.to_datetime(pnl["created_at"], utc=True, format="ISO8601")
-    pnl["ts_ms"] = (pnl["created_at"].astype("int64") // 1_000_000).astype("int64")
-    pnl["qty"] = pnl["qty"].astype(float)
-
-    print(f"trades: {len(trades):,}  pnl_records: {len(pnl):,}")
-
     fifo = fifo_pnl(trades)
     trades = pd.concat([trades, fifo], axis=1)
-    plat = match_platform_pnl(trades, pnl)
-    trades = pd.concat([trades, plat], axis=1)
 
-    matched = trades["platform_pnl_usdc"].notna().sum()
-    closing_fills = (trades["closing_qty"] > 0).sum()
-    print(f"closing fills: {closing_fills:,}  matched to platform pnl: {matched:,} "
-          f"({100.0*matched/max(closing_fills,1):.1f}%)")
+    if PNL_CSV.exists():
+        pnl = pd.read_csv(PNL_CSV)
+        pnl = pnl[pnl["transfer_type"] == "realized_pnl"].copy()
+        pnl["created_at"] = pd.to_datetime(pnl["created_at"], utc=True, format="ISO8601")
+        pnl["ts_ms"] = (pnl["created_at"].astype("int64") // 1_000_000).astype("int64")
+        pnl["qty"] = pnl["qty"].astype(float)
+        print(f"trades: {len(trades):,}  pnl_records: {len(pnl):,}")
+        plat = match_platform_pnl(trades, pnl)
+        trades = pd.concat([trades, plat], axis=1)
+        matched = trades["platform_pnl_usdc"].notna().sum()
+        closing_fills = (trades["closing_qty"] > 0).sum()
+        print(f"closing fills: {closing_fills:,}  matched to platform pnl: {matched:,} "
+              f"({100.0*matched/max(closing_fills,1):.1f}%)")
+    else:
+        print(f"trades: {len(trades):,}  (no PNL_CSV - skipping platform reconciliation)")
+        trades["platform_pnl_usdc"] = float("nan")
+        trades["platform_pnl_gap_ms"] = float("nan")
+        trades["platform_pnl_id"] = ""
 
-    # Optional join with tick slippage output
-    if SLIP_TICK_CSV.exists():
-        slip = pd.read_csv(SLIP_TICK_CSV, usecols=["id", "reference", "gap_ms",
+    if slip_tick_csv.exists():
+        slip = pd.read_csv(slip_tick_csv, usecols=["id", "reference", "gap_ms",
                                                    "slip_bps", "slip_usd"])
         trades = trades.merge(slip, on="id", how="left")
-        print(f"merged tick slippage from {SLIP_TICK_CSV.name}")
+        print(f"merged tick slippage from {slip_tick_csv.name}")
 
     out_cols = ["id", "created_at", "underlying", "side", "qty", "price", "notional",
                 "position_before", "position_after",
@@ -211,7 +224,7 @@ def main() -> int:
                 "platform_pnl_usdc", "platform_pnl_gap_ms", "platform_pnl_id"]
     if "slip_bps" in trades.columns:
         out_cols += ["reference", "gap_ms", "slip_bps", "slip_usd"]
-    trades[out_cols].to_csv(OUT_PER_TRADE, index=False)
+    trades[out_cols].to_csv(out_per_trade, index=False)
 
     # Summary per coin
     rows = []
@@ -234,7 +247,7 @@ def main() -> int:
             "slip_total_usd": slip_total,
         })
     summary = pd.DataFrame(rows).sort_values("computed_pnl_total")
-    summary.to_csv(OUT_SUMMARY, index=False)
+    summary.to_csv(out_summary, index=False)
 
     show = summary.copy()
     for c in ("computed_pnl_total", "platform_pnl_total", "best_trade",
@@ -253,7 +266,7 @@ def main() -> int:
     print(f"platform P&L total:   ${trades['platform_pnl_usdc'].sum(skipna=True):,.2f}")
     if "slip_usd" in trades.columns:
         print(f"slippage total:       ${trades['slip_usd'].sum(skipna=True):,.2f}")
-    print(f"\nwrote: {OUT_PER_TRADE}\nwrote: {OUT_SUMMARY}")
+    print(f"\nwrote: {out_per_trade}\nwrote: {out_summary}")
     return 0
 
 
