@@ -100,13 +100,18 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
     sym_dir.mkdir(exist_ok=True)
     cache = sym_dir / f"{symbol}-aggTrades-{tag}.csv.gz"
     if cache.exists():
-        df = pd.read_csv(cache, dtype={"price": "float64", "transact_time": "int64"})
-        return df
+        try:
+            return pd.read_csv(cache, dtype={"price": "float64", "transact_time": "int64"})
+        except (OSError, EOFError, zipfile.BadZipFile, Exception) as e:
+            # corrupt cache (interrupted write etc.) -> wipe and re-download
+            print(f"  [warn] corrupt cache {cache.name}: {e}; refetching")
+            cache.unlink(missing_ok=True)
 
     url = f"{ARCHIVE_BASE}/{symbol}/{symbol}-aggTrades-{tag}.zip"
-    zip_path = sym_dir / f"{symbol}-aggTrades-{tag}.zip"
+    zip_path = sym_dir / f"{symbol}-aggTrades-{tag}.zip.tmp"
     ok = _download(url, zip_path)
     if not ok:
+        zip_path.unlink(missing_ok=True)
         return None
     try:
         with zipfile.ZipFile(zip_path) as zf:
@@ -130,7 +135,10 @@ def fetch_day(symbol: str, day: datetime) -> pd.DataFrame | None:
     finally:
         zip_path.unlink(missing_ok=True)
     df = df.sort_values("transact_time").reset_index(drop=True)
-    df.to_csv(cache, index=False, compression="gzip")
+    # atomic write: write to .tmp then rename so the cache is never partial
+    tmp = cache.with_suffix(cache.suffix + ".tmp")
+    df.to_csv(tmp, index=False, compression="gzip")
+    tmp.replace(cache)
     return df
 
 
