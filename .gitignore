@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 slippage_tick_*.csv
 slippage_per_*.csv
+trade_pnl*.csv
