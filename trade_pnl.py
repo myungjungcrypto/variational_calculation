@@ -180,6 +180,19 @@ def main(argv: list[str] | None = None) -> int:
     slip_tick_csv = ROOT / f"slippage_tick_per_trade{suffix}.csv"
     print(f"input: {trades_csv.name}  output suffix: '{suffix}'")
 
+    # The pnl export must belong to the SAME account as the trades export.
+    # Look for a suffix-matched file first (export-pnl_d.csv for export-trades_d.csv);
+    # only fall back to the default export-pnl.csv for the default trades file,
+    # otherwise cross-account records could get falsely matched by timestamp.
+    pnl_csv = ROOT / f"export-pnl{suffix}.csv"
+    if not pnl_csv.exists():
+        if suffix == "" and PNL_CSV.exists():
+            pnl_csv = PNL_CSV
+        else:
+            pnl_csv = None
+            print(f"[warn] no export-pnl{suffix}.csv for this account - "
+                  f"skipping platform P&L reconciliation (FIFO P&L only)")
+
     trades = pd.read_csv(trades_csv)
     trades = trades[trades["status"] == "confirmed"].copy()
     trades["created_at"] = pd.to_datetime(trades["created_at"], utc=True, format="ISO8601")
@@ -192,13 +205,13 @@ def main(argv: list[str] | None = None) -> int:
     fifo = fifo_pnl(trades)
     trades = pd.concat([trades, fifo], axis=1)
 
-    if PNL_CSV.exists():
-        pnl = pd.read_csv(PNL_CSV)
+    if pnl_csv is not None:
+        pnl = pd.read_csv(pnl_csv)
         pnl = pnl[pnl["transfer_type"] == "realized_pnl"].copy()
         pnl["created_at"] = pd.to_datetime(pnl["created_at"], utc=True, format="ISO8601")
         pnl["ts_ms"] = (pnl["created_at"].astype("int64") // 1_000_000).astype("int64")
         pnl["qty"] = pnl["qty"].astype(float)
-        print(f"trades: {len(trades):,}  pnl_records: {len(pnl):,}")
+        print(f"trades: {len(trades):,}  pnl_records: {len(pnl):,}  (pnl file: {pnl_csv.name})")
         plat = match_platform_pnl(trades, pnl)
         trades = pd.concat([trades, plat], axis=1)
         matched = trades["platform_pnl_usdc"].notna().sum()
@@ -206,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"closing fills: {closing_fills:,}  matched to platform pnl: {matched:,} "
               f"({100.0*matched/max(closing_fills,1):.1f}%)")
     else:
-        print(f"trades: {len(trades):,}  (no PNL_CSV - skipping platform reconciliation)")
+        print(f"trades: {len(trades):,}  (no matching pnl file - skipping platform reconciliation)")
         trades["platform_pnl_usdc"] = float("nan")
         trades["platform_pnl_gap_ms"] = float("nan")
         trades["platform_pnl_id"] = ""
