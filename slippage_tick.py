@@ -180,9 +180,12 @@ def prefetch_all(trades: pd.DataFrame, workers: int = DOWNLOAD_WORKERS) -> None:
     """Download every (symbol, day) zip in parallel, skipping cached files."""
     tasks: list[tuple[str, datetime]] = []
     for coin, sub in trades.groupby("underlying"):
-        sym = symbol_for(coin)
         first = sub["created_at"].min()
         last = sub["created_at"].max()
+        sym = resolve_symbol(coin, datetime(first.year, first.month, first.day,
+                                            tzinfo=timezone.utc))
+        if sym is None:
+            continue
         cur = datetime(first.year, first.month, first.day, tzinfo=timezone.utc)
         end = datetime(last.year, last.month, last.day, tzinfo=timezone.utc)
         while cur <= end:
@@ -216,6 +219,32 @@ def symbol_for(coin: str) -> str:
     return f"{coin}USDT"
 
 
+# Some markets trade under a different (or index-style) symbol on Binance.
+# Candidates are probed in order; the first with an available archive wins.
+SYMBOL_CANDIDATES: dict[str, list[str]] = {
+    "SPY": ["SPYUSDT", "US500USDT", "SP500USDT"],
+    "QQQ": ["QQQUSDT", "NAS100USDT", "USTECH100USDT"],
+    "XAU": ["XAUUSDT", "GOLDUSDT"],
+}
+_RESOLVED: dict[str, str | None] = {}
+
+
+def resolve_symbol(coin: str, sample_day: datetime) -> str | None:
+    """Pick the first candidate symbol whose daily archive exists for sample_day.
+    Cached per coin. Returns None when nothing matches."""
+    if coin in _RESOLVED:
+        return _RESOLVED[coin]
+    for cand in SYMBOL_CANDIDATES.get(coin, [symbol_for(coin)]):
+        df = fetch_day(cand, sample_day)
+        if df is not None and not df.empty:
+            if cand != symbol_for(coin):
+                print(f"  [{coin}] resolved to Binance symbol {cand}")
+            _RESOLVED[coin] = cand
+            return cand
+    _RESOLVED[coin] = None
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Tick matching + slippage
 # ---------------------------------------------------------------------------
@@ -242,10 +271,19 @@ def compute(trades: pd.DataFrame) -> pd.DataFrame:
     """Pull ticks per coin and attach reference price + slippage."""
     enriched_blocks = []
     for coin, sub in trades.groupby("underlying"):
-        sym = symbol_for(coin)
         first = sub["created_at"].min()
         last = sub["created_at"].max()
         print(f"[{coin}] fills={len(sub):,}  range={first.date()}..{last.date()}")
+        sym = resolve_symbol(coin, datetime(first.year, first.month, first.day,
+                                            tzinfo=timezone.utc))
+        if sym is None:
+            print(f"  no archive for any candidate symbol - skipping")
+            sub = sub.copy()
+            sub["reference"] = np.nan
+            sub["gap_ms"] = np.nan
+            sub["matched"] = False
+            enriched_blocks.append(sub)
+            continue
         ticks = load_ticks(sym, first, last)
         if ticks.empty:
             print(f"  no archive for {sym} - skipping")
@@ -264,6 +302,17 @@ def compute(trades: pd.DataFrame) -> pd.DataFrame:
         sub["reference"] = ref
         sub["gap_ms"] = gap
         sub["matched"] = ~np.isnan(ref)
+        # Scale normalization: an index-style symbol (e.g. US500 vs SPY ETF)
+        # tracks the market at a different price level. If the median
+        # fill/reference ratio is far from 1, rescale the reference so bps
+        # deviations are measured around the instruments' own relationship.
+        with np.errstate(invalid="ignore"):
+            ratio = sub["price"].to_numpy() / sub["reference"].to_numpy()
+        med = float(np.nanmedian(ratio)) if np.isfinite(np.nanmedian(ratio)) else 1.0
+        if abs(med - 1.0) > 0.02:
+            sub["reference"] = sub["reference"] * med
+            print(f"  scale-normalized reference by x{med:.6f} "
+                  f"({sym} trades at a different price level than {coin})")
         matched_pct = 100.0 * sub["matched"].mean()
         print(f"  matched {sub['matched'].sum():,}/{len(sub):,} ({matched_pct:.1f}%)")
         enriched_blocks.append(sub)
