@@ -21,7 +21,6 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-OUT = ROOT / "export-trades_lighter.csv"
 
 BUY_SIDES = {"Open Long", "Close Short"}
 SELL_SIDES = {"Open Short", "Close Long"}
@@ -29,9 +28,12 @@ SELL_SIDES = {"Open Short", "Close Long"}
 
 def main() -> int:
     if len(sys.argv) < 2:
-        print("usage: python lighter_convert.py <lighter-export.csv>")
+        print("usage: python lighter_convert.py <lighter-export.csv> [suffix]")
+        print("  output: export-trades_<suffix>.csv  (default suffix: lighter)")
         return 1
     src = Path(sys.argv[1])
+    suffix = sys.argv[2] if len(sys.argv) > 2 else "lighter"
+    out_path = ROOT / f"export-trades_{suffix}.csv"
     t = pd.read_csv(src)
     t["Date"] = pd.to_datetime(t["Date"], utc=True)
 
@@ -52,8 +54,8 @@ def main() -> int:
         "status": "confirmed",
         "liquidation_trigger_price": "",
     })
-    out.to_csv(OUT, index=False)
-    print(f"wrote {len(out):,} rows -> {OUT}")
+    out.to_csv(out_path, index=False)
+    print(f"wrote {len(out):,} rows -> {out_path}")
     print("markets:", out.groupby("underlying").size().to_dict())
     return 0
 
