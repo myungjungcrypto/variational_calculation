@@ -51,11 +51,13 @@ def load_ref(ticker: str, start, end) -> pd.Series:
 
 def interp_ref(refs: pd.Series, ts: pd.Series) -> np.ndarray:
     """open->next open linear interpolation at each fill timestamp.
-    NaN where the fill's minute (or the next bar) is missing / >5min gap."""
-    idx_times = refs.index.asi8  # ns
-    vals = refs.values.astype(float)
+    NaN where the fill's minute (or the next bar) is missing / >5min gap.
+    Both time axes are forced to int64 nanoseconds (UTC) so mixed datetime
+    resolutions (pandas 2/3, ns vs us) can't silently break the search."""
+    idx_times = refs.index.tz_convert("UTC").to_numpy(dtype="datetime64[ns]").astype("int64")
+    vals = refs.to_numpy(dtype=float)
     out = np.full(len(ts), np.nan)
-    t_ns = ts.astype("int64").values
+    t_ns = ts.dt.tz_convert("UTC").to_numpy(dtype="datetime64[ns]").astype("int64")
     pos = np.searchsorted(idx_times, t_ns, side="right") - 1
     for i, p in enumerate(pos):
         if p < 0 or p + 1 >= len(idx_times):
