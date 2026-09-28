@@ -1,0 +1,12 @@
+snapshot_date,referrer,referee_masked,referred_on,cumulative_volume_usd,note
+2026-09-18,A1,0xc2...9664,2026-09-03,28408753.47,this referee IS account A3 (volume matches A3 export exactly)
+2026-09-18,A1,0xaF...71f0,2026-09-05,103899.76,
+2026-09-18,A1,0x10...4890,2026-09-07,,no volume shown
+2026-09-27,A1,0xc2...9664,2026-09-03,35823804.21,= A3 export total volume through 2026-09-27T06:34Z
+2026-09-27,A1,0x52...1040,2026-09-21,5224966.56,new referee; timing of its volume within the week unknown
+2026-09-27,A1,0x88...1eaC,2026-09-19,1830420.96,new referee
+2026-09-27,A1,0xaF...71f0,2026-09-05,103899.76,
+2026-09-27,A1,0x0c...1b1c,2026-09-19,1052.35,
+2026-09-27,A1,0x35...3E36,2026-09-24,506.99,
+2026-09-27,A1,0x01...201A,2026-09-25,399.03,
+2026-09-27,A1,0x10...4890,2026-09-07,,no volume shown

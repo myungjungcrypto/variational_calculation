@@ -1,0 +1,9 @@
+account_type,last_14d_volume_tier,fee_discount,maker_fee_pct,taker_fee_pct,taker_latency_ms,rate_limit_tx_per_min,note
+Standard,0,,0.0000,0.0000,300,4000,zero fees; advanced order types (RFQ/Chase/Iceberg/TWAP) charge 0.01% on Standard
+Premium,<=1M,,0.0120,0.0350,200,4000,
+Premium,>1M,2.5%,0.0117,0.0341,195,5000,A1 is on this tier (observed taker fee 3.41bp matches export)
+Premium,>10M,5%,0.0114,0.0333,190,6000,
+Premium,>20M,10%,0.0108,0.0315,180,7000,
+Premium,>50M,15%,0.0102,0.0298,170,8000,
+Premium,>200M,20%,0.0096,0.0280,160,12000,
+Premium,>500M,30%,0.0084,0.0245,150,24000,

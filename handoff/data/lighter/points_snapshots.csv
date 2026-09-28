@@ -1,0 +1,19 @@
+account,timestamp_utc,timestamp_kst,points,rank,equity_usd,note
+A1,2026-09-18T14:12:00Z,2026-09-18 23:12,256.955869,226,,approx time (screenshot minute uncertain by ~10 min)
+A1,2026-09-18T14:31:00Z,2026-09-18 23:31,256.996044,226,,clean pre-drop snapshot
+A1,2026-09-18T15:32:00Z,2026-09-19 00:32,565.454222,115,,post Friday drop (drop landed between 14:31Z and 15:32Z)
+A1,2026-09-18T19:11:00Z,2026-09-19 04:11,566.390262,114,,no trades in window
+A1,2026-09-19T02:35:00Z,2026-09-19 11:35,568.296016,115,,no trades in window; positions snapshot taken same time
+A1,2026-09-27T15:00:00Z,2026-09-28 00:00,825.327811,91,,taken at export time; A1 DID trade during 9/19-9/27
+A1,2026-09-28T13:00:00Z,2026-09-28 22:00,831.977303,92,255654.39,equity from account panel
+A2,2026-09-18T14:12:00Z,2026-09-18 23:12,13.696380,2270,,approx time
+A2,2026-09-18T14:31:00Z,2026-09-18 23:31,13.697564,2270,,clean pre-drop
+A2,2026-09-18T15:33:00Z,2026-09-19 00:33,29.493859,1645,,post Friday drop
+A2,2026-09-18T19:11:00Z,2026-09-19 04:11,29.591919,1643,,window contains ONE accidental trade: ~$15000 HYPE Open Long (maker) at 2026-09-18T16:07:50Z
+A2,2026-09-19T02:42:00Z,2026-09-19 11:42,29.653493,1643,,no trades in window; positions snapshot same time
+A2,2026-09-27T15:00:00Z,2026-09-28 00:00,47.524591,1466,,taken at export time; last trade in export 2026-09-23T11:39Z
+A2,2026-09-28T13:00:00Z,2026-09-28 22:00,47.710838,1472,11494.18,equity from account panel
+A3,2026-09-19T03:03:00Z,2026-09-19 12:03,1967.074763,29,,
+A3,2026-09-19T03:59:00Z,2026-09-19 12:59,1967.879876,29,,
+A3,2026-09-26T10:40:00Z,2026-09-26 19:40,2797.108974,22,,taken 24h BEFORE the export timestamp (export 2026-09-27T10:40Z)
+A3,2026-09-28T03:42:00Z,2026-09-28 12:42,2843.574565,22,2868729.64,equity from account panel
