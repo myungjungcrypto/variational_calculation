@@ -1,0 +1,18 @@
+{
+  "sep25_linear_volume_coefficient": 35.956819341442966,
+  "sep25_linear_oi_coefficient": 12.59095918149353,
+  "sep18_volume_coefficient_if_sep25_oi_applies": 40.63189352869656,
+  "sep25_power_law_without_oi_exponent": 1.272278152263296,
+  "sep25_power_law_without_oi_scale": 61.015279758744356,
+  "sep25_stock_volume_only_coefficient": 1676.5963337440041,
+  "sep25_other_volume_only_coefficient": 45.07586502335744,
+  "sep25_stock_vs_other_volume_multiplier": 37.19498966631532,
+  "clean_live_stock_coefficient": 4.763036444109396,
+  "clean_live_other_coefficient": 6.536161059668267,
+  "clean_live_two_sector_max_relative_residual": 0.08326583607652494,
+  "a3_tail_live_net_known_realtime": 4.970472108534535,
+  "a1_sep19_sep27_predicted_own": 186.01248139382307,
+  "a1_sep19_sep27_predicted_a3_referral": 86.67769273065451,
+  "a1_sep19_sep27_observed": 257.031795,
+  "a1_sep19_sep27_residual_before_other_referral": -15.658379124477591
+}

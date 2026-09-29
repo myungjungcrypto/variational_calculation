@@ -1,0 +1,114 @@
+{
+  "inputs": [
+    "data/lighter/leaderboard_snapshots.csv",
+    "data/lighter/points_snapshots.csv"
+  ],
+  "assumptions_for_bounds": [
+    "Cumulative points for each account do not decrease or disappear.",
+    "Rank r means at least r accounts have that many points.",
+    "CSV measurements are accepted as supplied; screenshot timing is approximate."
+  ],
+  "total_bounds": [
+    {
+      "as_of_utc": "2026-09-19T03:59:00Z",
+      "total_points_lower": 275441.128003,
+      "total_points_upper": "unbounded",
+      "minimum_observed_account_count": 2270
+    },
+    {
+      "as_of_utc": "2026-09-28T13:00:00Z",
+      "total_points_lower": 337899.979222,
+      "total_points_upper": "unbounded",
+      "minimum_observed_account_count": 2270
+    }
+  ],
+  "near_synchronous_model": {
+    "anchor_window_utc": [
+      "2026-09-19T02:35:00Z",
+      "2026-09-19T03:03:00Z"
+    ],
+    "top_10_points": 109988.9583,
+    "prefix_1643_loglog_interpolation": 392547.6526390694,
+    "prefix_1643_monotone_lower_if_synchronized": 241547.37347700002,
+    "prefix_1643_monotone_upper_if_synchronized": 1215074.409259,
+    "tail_alpha_from_ranks_115_1643": 1.11044648295277,
+    "finite_N_scenarios_at_observed_alpha": [
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": 2270,
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 408014.60885113914,
+        "model_sum_lower": 408014.60885113914,
+        "model_sum_upper": 408014.60885113914
+      },
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": 5000,
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 443559.1077319205,
+        "model_sum_lower": 443559.1077319205,
+        "model_sum_upper": 443559.1077319205
+      },
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": 10000,
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 472306.8518806074,
+        "model_sum_lower": 472306.8518806074,
+        "model_sum_upper": 472306.8518806074
+      },
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": 25000,
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 507085.3247995217,
+        "model_sum_lower": 507085.3247995217,
+        "model_sum_upper": 507085.3247995217
+      },
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": 100000,
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 553446.9714795385,
+        "model_sum_lower": 553446.9714795385,
+        "model_sum_upper": 553446.9714795385
+      },
+      {
+        "tail_alpha": 1.11044648295277,
+        "population_N": "infinite",
+        "first_1643_model_points": 392547.6526390694,
+        "total_model_points": 833657.6879036399,
+        "model_sum_lower": 833642.8661654363,
+        "model_sum_upper": 833672.5096418434
+      }
+    ],
+    "warning": "These are structural model scenarios, not confidence intervals or measured totals."
+  },
+  "growth": {
+    "start_utc": "2026-09-19T03:59:00Z",
+    "end_utc": "2026-09-28T03:42:00Z",
+    "elapsed_days": 8.988194444444444,
+    "top_two": {
+      "series": "top_2_sum",
+      "start_utc": "2026-09-19T03:59:00Z",
+      "end_utc": "2026-09-28T03:42:00Z",
+      "elapsed_days": 8.988194444444444,
+      "points_start": 50894.456999999995,
+      "points_end": 63733.599,
+      "points_change": 12839.142000000007,
+      "relative_change": 0.25226994758977406,
+      "average_change_per_7_days": 9999.115457003792,
+      "compound_change_per_7_days": 0.1914809597227669
+    },
+    "a3_change": 875.6946889999999,
+    "platform_absolute_change_lower": 13714.836689000007,
+    "platform_average_weekly_change_lower": 10681.105912471612,
+    "platform_absolute_change_upper": "unbounded",
+    "platform_percentage_change": "not identified",
+    "warning": "Differences of total lower bounds are not lower bounds on total growth."
+  },
+  "prior_assessment": {
+    "500000_current_total": "plausible model scenario, not identified",
+    "100000_to_150000_weekly_growth": "not identified by these snapshots"
+  }
+}

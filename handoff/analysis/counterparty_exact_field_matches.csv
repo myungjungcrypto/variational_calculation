@@ -1,0 +1,7 @@
+Market,Side_a1,Date,Trade Value,Size,Price,Closed PnL_a1,Fee_a1,Role_a1,Type_a1,Trade ID_a1,direction_a1,Side_a3,Closed PnL_a3,Fee_a3,Role_a3,Type_a3,Trade ID_a3,direction_a3,trade_id_equal
+ZEC,Close Short,2026-09-23 01:20:56,39.178161,0.024300,1612.270000,0.504324,0.0046,Maker,trade,938382334,1,Open Short,-,0.0123,Taker,trade,938382334,-1,True
+ZEC,Close Short,2026-09-23 01:20:48,39.178161,0.024300,1612.270000,0.504324,0.0046,Maker,trade,938379000,1,Open Short,-,0.0123,Taker,trade,938379000,-1,True
+BTC,Open Long,2026-09-22 22:55:32,174.858313,0.002030,86137.100000,-,0.0205,Maker,trade,934845974,1,Open Short,-,0.0551,Taker,trade,934845974,-1,True
+ETH,Open Short,2026-09-22 22:55:20,928.345873,0.336700,2757.190000,-,0.1086,Maker,trade,934843597,-1,Open Long,-,0.2924,Taker,trade,934843597,1,True
+BTC,Open Long,2026-09-22 22:43:31,268.937448,0.003120,86197.900000,-,0.0315,Maker,trade,934593561,1,Open Short,-,0.0847,Taker,trade,934593561,-1,True
+ETH,Open Short,2026-09-22 22:40:50,927.763382,0.336700,2755.460000,-,0.1085,Maker,trade,934542679,-1,Open Long,-,0.2922,Taker,trade,934542679,1,True

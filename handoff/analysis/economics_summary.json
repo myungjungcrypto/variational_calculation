@@ -1,0 +1,24 @@
+{
+  "oi_rate_cases": {
+    "fitted_oi_drop": 17.269614156180292,
+    "live_only": 5.5,
+    "conditional_sensitivity_low": 15.31645352804305,
+    "conditional_sensitivity_high": 21.381988141553126,
+    "prior_scenario": 15.5
+  },
+  "referral_live_implied_at_common_live": 0.09440588012146131,
+  "referral_live_sensitivity_range": [
+    0.01755169788547136,
+    0.19433129835032154
+  ],
+  "cumulative_funding_usd_at_position_snapshots": {
+    "A1": 541.24,
+    "A2": 23.23999999999998
+  },
+  "a3_referral_display_minus_export_volume_usd": 1439.3771409988403,
+  "new_referee_reported_volume_usd": 7057345.89,
+  "new_referee_volume_points_referral_scenario_min": 3.2289334491058908,
+  "new_referee_volume_points_referral_scenario_max": 30.431011802825555,
+  "a1_all_points_fee_ratio_invalid_own_denominator": 2.3104098852828696,
+  "pool_lit_assumed": 11000000
+}

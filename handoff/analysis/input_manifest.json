@@ -1,0 +1,47 @@
+[
+  {
+    "path": "data/lighter/a1_lighter_export_2026-09-27T15_00Z.csv",
+    "bytes": 6565365,
+    "sha256": "ea3418a3306be2306af1babcd914fb7b1bfdbbcfa234abc741ca68bb63babea5"
+  },
+  {
+    "path": "data/lighter/a2_lighter_export_2026-09-27T15_04Z.csv",
+    "bytes": 131674,
+    "sha256": "1db2ac036e449df66dfca2c55508de0ceaf1c456326b46d083bc371a48ab62db"
+  },
+  {
+    "path": "data/lighter/a3_lighter_export_2026-09-27T10_40Z.csv.gz",
+    "bytes": 4880981,
+    "sha256": "0c3a87fc320bd218830219dafc8a04298724c92b8bfb48c82a7fcdecbf9577b0"
+  },
+  {
+    "path": "data/lighter/fee_tiers.csv",
+    "bytes": 584,
+    "sha256": "bcf53ca8a585be3502643822d24f14a7635c5e6fdd32384301ebe9cf5809a176"
+  },
+  {
+    "path": "data/lighter/leaderboard_snapshots.csv",
+    "bytes": 784,
+    "sha256": "30a1b13861eba78f6b1bd63e3583ad4ff580908fb209e0905b2b452fbde9b016"
+  },
+  {
+    "path": "data/lighter/points_snapshots.csv",
+    "bytes": 1770,
+    "sha256": "fc5e7f66da5c459a1aa5fd266b81001cb46500a246fbd500d8b98738a6a0f552"
+  },
+  {
+    "path": "data/lighter/positions_snapshots.csv",
+    "bytes": 1167,
+    "sha256": "aeadd02344a4a90cc46277fd3d7428c97ba96b5e0b181ee6ad7e01317ba4ee9a"
+  },
+  {
+    "path": "data/lighter/program_facts.md",
+    "bytes": 2745,
+    "sha256": "a7a7b75cf5df701bbf3b5984f3353cfce86a446f84afa0257985452f9faeffb4"
+  },
+  {
+    "path": "data/lighter/referrals.csv",
+    "bytes": 794,
+    "sha256": "ac102f6d29781b8ca84935e8b895a3d8d359a6e9766fe0844c30e00d25d78d00"
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "warning": "Historical time-weighted TVL is missing. Final equity is a counterfactual constant proxy, not measured historical TVL.",
+  "equity_definition": "Account equity including PnL, not necessarily deposited collateral, net deposits or free margin.",
+  "live_and_credit_subtractions": "Held fixed at baseline OI-live model and A2 credit estimate.",
+  "assumed_oi_drop_coefficient": 0.0,
+  "volume_coefficient": 43.0403853220557,
+  "equity_coefficient": 120.97157790628918,
+  "baseline_drop_rmse": 0.6922462095269747,
+  "counterfactual_drop_rmse": 0.661448617055617,
+  "a1_drop_available_before_other_referrals": 124.85329949718516,
+  "a1_baseline_predicted_drop": 139.49283690966485,
+  "a1_baseline_residual_before_other_referrals": -14.639537412479683,
+  "a1_counterfactual_predicted_drop": 118.92603456405128,
+  "a1_counterfactual_residual_before_other_referrals": 5.927245668001618,
+  "a3_referral_adjustment_under_tvl_model": 1.9265132266355067e-05,
+  "caveats": [
+    "Same number of drop coefficients as baseline (two), but different unmeasured proxy assumption.",
+    "Only three calibration observations from two accounts; no statistical model selection claim.",
+    "A1 A3 referral is recomputed for the changed weekly drop; live and credit remain fixed.",
+    "A1 remains a conditional diagnostic with unobserved other referrals and missing-export-tail assumption.",
+    "A1 other-referee points are unknown; positive residual is compatible, not a measurement.",
+    "Positive TVL coefficient is not evidence that the exchange uses this metric.",
+    "Reported sensitivity does not replace the original APR estimate with a newly verified value."
+  ],
+  "inputs": [
+    {
+      "account": "A1",
+      "equity_observed_utc": "2026-09-28T13:00:00Z",
+      "equity_snapshot_usd": 255654.39,
+      "week25_average_oi_m": 5.156174806670503,
+      "counterfactual_leverage": 20.168536150192853,
+      "counterfactual_equity_per_dollar_oi": 0.04958218050894278
+    },
+    {
+      "account": "A2",
+      "equity_observed_utc": "2026-09-28T13:00:00Z",
+      "equity_snapshot_usd": 11494.18,
+      "week25_average_oi_m": 0.2470759152576401,
+      "counterfactual_leverage": 21.495740910412064,
+      "counterfactual_equity_per_dollar_oi": 0.04652084355536785
+    },
+    {
+      "account": "A3",
+      "equity_observed_utc": "2026-09-28T03:42:00Z",
+      "equity_snapshot_usd": 2868729.64,
+      "week25_average_oi_m": 31.83341344407146,
+      "counterfactual_leverage": 11.096693463268103,
+      "counterfactual_equity_per_dollar_oi": 0.09011693468060246
+    }
+  ]
+}

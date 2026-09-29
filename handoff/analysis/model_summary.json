@@ -1,0 +1,70 @@
+{
+  "live_center": 5.5,
+  "live_sensitivity_range": [
+    4.5,
+    6.9
+  ],
+  "rt_local_a2": 4.575280139919415,
+  "a2_clean_live": 6.146896387208494,
+  "a3_clean_live": 4.9943935409506395,
+  "a1_clean_common_live_with_10pct_a3": 5.39192808079517,
+  "drop_volume_coeff": 38.54434624249325,
+  "drop_oi_coeff": 11.769614156180292,
+  "drop_unscaled_condition_number": 84.74230760676971,
+  "drop_column_normalized_condition_number": 31.597251811893706,
+  "drop_sensitivity_volume_range": [
+    33.251879385446514,
+    39.52384497091001
+  ],
+  "drop_sensitivity_oi_range": [
+    8.41645352804305,
+    16.881988141553126
+  ],
+  "max_position_size_error": 5.3887561080046e-10,
+  "drop_volume_only_pooled_coeff": 99.22094713218704,
+  "live_cross_section_power_exponent": 0.9589698009224316,
+  "live_cross_section_power_scale": 5.837131605945598,
+  "alternative_no_oi_superlinear_alpha": 1.2720903354018989,
+  "alternative_no_oi_superlinear_k": 60.712986576973655,
+  "alternative_no_oi_other_volume_rate": 44.86191050009723,
+  "alternative_no_oi_stock_volume_rate": 1667.0135183727284,
+  "alternative_no_oi_superlinear_sep18_residual": 1.806187187069737,
+  "prior_drop_volume_coeff_sensitivity": [
+    {
+      "volume": 45,
+      "oi": 8,
+      "residuals": [
+        -0.2826929730794343,
+        -2.022024351369645,
+        80.32359978460431
+      ]
+    },
+    {
+      "volume": 45,
+      "oi": 11,
+      "residuals": [
+        -0.989087669697271,
+        -2.763252097142565,
+        -15.176640547610077
+      ]
+    },
+    {
+      "volume": 50,
+      "oi": 8,
+      "residuals": [
+        -1.8591602925744346,
+        -3.6665023652846433,
+        49.59384573233933
+      ]
+    },
+    {
+      "volume": 50,
+      "oi": 11,
+      "residuals": [
+        -2.5655549891922713,
+        -4.407730111057564,
+        -45.90639459987506
+      ]
+    }
+  ]
+}

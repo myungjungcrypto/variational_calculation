@@ -1,0 +1,6 @@
+Market,Role_a1,Role_a3,same_second_opposite_side_groups
+BTC,Maker,Taker,2
+ETH,Maker,Taker,2
+QQQ,Taker,Taker,538
+SPY,Taker,Taker,844
+ZEC,Maker,Taker,2

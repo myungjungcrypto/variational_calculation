@@ -1,0 +1,76 @@
+{
+  "inputs": {
+    "A1": {
+      "path": "data/lighter/a1_lighter_export_2026-09-27T15_00Z.csv",
+      "sha256": "ea3418a3306be2306af1babcd914fb7b1bfdbbcfa234abc741ca68bb63babea5"
+    },
+    "A3": {
+      "path": "data/lighter/a3_lighter_export_2026-09-27T10_40Z.csv.gz",
+      "sha256": "0c3a87fc320bd218830219dafc8a04298724c92b8bfb48c82a7fcdecbf9577b0"
+    }
+  },
+  "shared_trade_id_count": 6,
+  "shared_ids_matching_all_execution_fields_and_roles": 6,
+  "exact_opposite_field_match_count": 6,
+  "exact_opposite_field_matches_with_different_ids": 0,
+  "single_sided_matched_notional_usd": "2378.261338",
+  "two_export_sum_of_matched_notional_usd": "4756.522676",
+  "matched_notional_share_of_lifetime_pct": {
+    "A1": 0.027209831443749912,
+    "A3": 0.006639040580086097
+  },
+  "lifetime_notional_usd": {
+    "A1": "8740448.623934",
+    "A3": "35822364.832859"
+  },
+  "role_fill_counts": {
+    "A1": {
+      "Taker": 67201,
+      "Maker": 338
+    },
+    "A3": {
+      "Taker": 334079
+    }
+  },
+  "same_second_group_role_counts": [
+    {
+      "Market": "BTC",
+      "Role_a1": "Maker",
+      "Role_a3": "Taker",
+      "same_second_opposite_side_groups": 2
+    },
+    {
+      "Market": "ETH",
+      "Role_a1": "Maker",
+      "Role_a3": "Taker",
+      "same_second_opposite_side_groups": 2
+    },
+    {
+      "Market": "QQQ",
+      "Role_a1": "Taker",
+      "Role_a3": "Taker",
+      "same_second_opposite_side_groups": 538
+    },
+    {
+      "Market": "SPY",
+      "Role_a1": "Taker",
+      "Role_a3": "Taker",
+      "same_second_opposite_side_groups": 844
+    },
+    {
+      "Market": "ZEC",
+      "Role_a1": "Maker",
+      "Role_a3": "Taker",
+      "same_second_opposite_side_groups": 2
+    }
+  ],
+  "interpretation": [
+    "Six shared IDs also match UTC second, market, price, size and notional, with opposite directions and complementary maker/taker roles.",
+    "This strongly supports opposite sides of the same six executions, assuming the exports use common execution IDs; ID semantics were not independently verified here.",
+    "The combined value counts each execution twice across the two exports; single-sided matched notional is the appropriate match-volume figure.",
+    "The SPY/QQQ same-second opposite groups are Taker/Taker and share no IDs; normal maker/taker semantics do not make them opposite sides of one trade.",
+    "The export contains no counterparty address field, order IDs, order submissions, IP/control information, point eligibility flags, or penalty ledger.",
+    "Intent, common beneficial ownership, coordination, rule violation, netting/deductions and future enforcement cannot be inferred from these matches.",
+    "A point-model residual is not a penalty measurement: the fitted reward rule and referral allocation are independently uncertain."
+  ]
+}

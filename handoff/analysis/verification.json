@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "check": "A1 independent Decimal fee/volume totals",
+      "status": "pass",
+      "fills": 67539
+    },
+    {
+      "check": "A2 independent Decimal fee/volume totals",
+      "status": "pass",
+      "fills": 1349
+    },
+    {
+      "check": "A3 independent Decimal fee/volume totals",
+      "status": "pass",
+      "fills": 334079
+    },
+    {
+      "check": "all supplied position sizes agree with reconstructed signed sizes",
+      "status": "pass",
+      "positions": 11
+    },
+    {
+      "check": "every adjacent snapshot interval represented; deltas telescope to raw observations",
+      "status": "pass",
+      "windows": 15
+    },
+    {
+      "check": "all requested APR combinations are present for each rate scenario",
+      "status": "pass",
+      "rows": 360
+    },
+    {
+      "check": "JSON outputs contain no NaN or infinity tokens",
+      "status": "pass"
+    }
+  ],
+  "scope": "These are data and output checks, not validation that the points model is the true rule."
+}

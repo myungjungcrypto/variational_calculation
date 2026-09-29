@@ -1,0 +1,42 @@
+{
+  "a2_local_live": 6.104362778693637,
+  "a2_local_immediate_volume": 4.574203949143591,
+  "a2_local_immediate_fixed_marks": 4.574214260288087,
+  "model_scope": "Local data audit; all coefficients conditional on current holdings and last-fill price proxy.",
+  "a2_accidental_window": {
+    "account": "A2",
+    "start": "2026-09-18T15:33:00+00:00",
+    "end": "2026-09-18T19:11:00+00:00",
+    "hours": 3.6333333333333333,
+    "volume_m": 0.015000038072,
+    "fees": 1.7999999999999998,
+    "fills": 15,
+    "oi_mweek": 0.004823888697528457,
+    "stock_mweek": 0.002158285110456781,
+    "crypto_other_mweek": 0.0026656035870716768,
+    "fixed_sep19_marks_mweek": 0.004939868858224811,
+    "points": 0.09806000000000026,
+    "note_end": "window contains ONE accidental trade: ~$15000 HYPE Open Long (maker) at 2026-09-18T16:07:50Z",
+    "naive_live_pt_mweek": 20.32799804237643,
+    "a3_oi_mweek": null,
+    "live_rate_if_10pct_a3": null
+  },
+  "a2_clean_window": {
+    "account": "A2",
+    "start": "2026-09-18T19:11:00+00:00",
+    "end": "2026-09-19T02:42:00+00:00",
+    "hours": 7.516666666666667,
+    "volume_m": 0.0,
+    "fees": 0.0,
+    "fills": 0,
+    "oi_mweek": 0.010086884124075171,
+    "stock_mweek": 0.004465076077137651,
+    "crypto_other_mweek": 0.00562180804693752,
+    "fixed_sep19_marks_mweek": 0.010329456089282062,
+    "points": 0.06157400000000024,
+    "note_end": "no trades in window; positions snapshot same time",
+    "naive_live_pt_mweek": 6.104362778693637,
+    "a3_oi_mweek": null,
+    "live_rate_if_10pct_a3": null
+  }
+}
