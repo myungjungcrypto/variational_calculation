@@ -1,0 +1,9 @@
+id,created_at,side,instrument_type,underlying,price,qty,trade_type,status,liquidation_trigger_price
+cc8ed4cd-ec3b-4a73-b990-f78674bd045a,2026-10-09T15:07:27.466Z,buy,swap,XAU,4182.760000000000,11.954400000000,trade,confirmed,
+1ec40d82-1c29-4e5b-8391-6082ebcf2e5e,2026-10-09T15:07:54.640Z,sell,swap,XAU,4182.040000000000,11.955940000000,trade,confirmed,
+27c7c895-45f9-4c0a-b695-b2d403abb3aa,2026-10-09T01:34:42.245Z,sell,swap,XAU,4168.280000000000,12.056730000000,trade,confirmed,
+8073accb-cfb5-4185-91da-c4b3c6e90d19,2026-10-07T06:38:51.735Z,buy,swap,XAU,4132.180000000000,12.100150000000,trade,confirmed,
+c7683105-b732-464b-909b-ae6db6c2031d,2026-10-07T06:40:04.599Z,sell,perpetual_rwa_future,XAU,4135.300000000000,4.276140000000,trade,confirmed,
+5862cf73-aab1-4925-b1be-4d95dd1bc499,2026-10-07T02:51:00.928Z,buy,swap,XAU,4147.070000000000,12.056730000000,trade,confirmed,
+8eec0ac9-7bbc-411d-82a1-96dd2576a3a7,2026-09-17T13:57:17.426Z,buy,perpetual_rwa_future,QQQ,715.420000000000,69.891500000000,trade,confirmed,
+2254db23-75f3-40fb-a6a0-bd7e7d4cc82a,2026-09-17T13:57:22.491Z,sell,perpetual_rwa_future,US500,761.043000000000,65.699800000000,trade,confirmed,
