@@ -1,0 +1,112 @@
+[
+ {
+  "acct": "acct1",
+  "points": 181.443115,
+  "fills_week": 156,
+  "volume": 7487676.0,
+  "cost": 984.1,
+  "oi_raw_avg": 9559040.0,
+  "oi_w_avg": 10167339.0,
+  "oi_w_start": 10448556.0,
+  "oi_w_end": 10420538.0,
+  "oitime_w": 10.167338968018178,
+  "vol_by": {
+   "BTC": 3549838.0,
+   "ETH": 2571695.0,
+   "XAU": 530010.0,
+   "HYPE": 240234.0,
+   "SOL": 197581.0,
+   "XAG": 79926.0,
+   "QQQ": 65000.0,
+   "ZEC": 61622.0,
+   "US500": 35000.0,
+   "LIGHTER": 32478.0,
+   "ENA": 31870.0,
+   "PONS": 20495.0,
+   "NEAR": 20342.0,
+   "WLD": 19711.0,
+   "BNB": 17419.0,
+   "USELESS": 5000.0,
+   "ONDO": 4954.0,
+   "OPENAI": 2999.0,
+   "CASHCAT": 1500.0
+  },
+  "oi_by_mkt": {
+   "US500/perpetual_rwa_future": 1997812.0,
+   "CASHCAT/perpetual_future": 14560.0,
+   "OVERTAKE/perpetual_future": 0.0,
+   "UNI/perpetual_future": 0.0,
+   "QQQ/perpetual_rwa_future": 1945263.0,
+   "WLD/perpetual_future": 2917.0,
+   "PUMPFUN/perpetual_future": 0.0,
+   "XAU/swap": 1216598.0,
+   "SUI/perpetual_future": 0.0,
+   "OPENAI/perpetual_rwa_future": 13056.0,
+   "ZEC/perpetual_future": 45297.0,
+   "USELESS/perpetual_future": 14505.0,
+   "PENGU/perpetual_future": 0.0,
+   "ETH/perpetual_future": 1993012.0,
+   "VIRTUAL/perpetual_future": 0.0,
+   "NEAR/perpetual_future": 312.0,
+   "XAU/perpetual_rwa_future": 355882.0,
+   "ZRO/perpetual_future": 0.0,
+   "ONDO/perpetual_future": 185.0,
+   "XAG/perpetual_rwa_future": 60.0,
+   "ENA/perpetual_future": 15711.0,
+   "LIGHTER/perpetual_future": 853.0,
+   "HOOD/perpetual_rwa_future": 0.0,
+   "BNB/perpetual_future": 55260.0,
+   "CRWD/perpetual_rwa_future": 0.0,
+   "PONS/perpetual_future": 13906.0,
+   "SOL/perpetual_future": 267939.0,
+   "BTC/perpetual_future": 2028084.0,
+   "HYPE/perpetual_future": 186129.0
+  }
+ },
+ {
+  "acct": "acct2",
+  "points": 11.620779,
+  "fills_week": 3,
+  "volume": 150258.0,
+  "cost": 22.5,
+  "oi_raw_avg": 692387.0,
+  "oi_w_avg": 750515.0,
+  "oi_w_start": 833899.0,
+  "oi_w_end": 735452.0,
+  "oitime_w": 0.7505152649717456,
+  "vol_by": {
+   "XAU": 150258.0
+  },
+  "oi_by_mkt": {
+   "ETH/perpetual_future": 152487.0,
+   "US500/perpetual_rwa_future": 150501.0,
+   "QQQ/perpetual_rwa_future": 151390.0,
+   "BTC/perpetual_future": 162197.0,
+   "XAU/perpetual_rwa_future": 17683.0,
+   "XAU/swap": 116257.0
+  }
+ },
+ {
+  "acct": "acct3",
+  "points": 7.900982,
+  "fills_week": 12,
+  "volume": 675428.0,
+  "cost": 101.3,
+  "oi_raw_avg": 107057.0,
+  "oi_w_avg": 108356.0,
+  "oi_w_start": 199504.0,
+  "oi_w_end": 79997.0,
+  "oitime_w": 0.10835589729642174,
+  "vol_by": {
+   "XAU": 387433.0,
+   "QQQ": 145773.0,
+   "US500": 142222.0
+  },
+  "oi_by_mkt": {
+   "XAU/perpetual_rwa_future": 1299.0,
+   "US500/perpetual_rwa_future": 52136.0,
+   "QQQ/perpetual_rwa_future": 52322.0,
+   "XAU/swap": 2598.0
+  }
+ }
+]
