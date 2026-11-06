@@ -41,3 +41,16 @@ var2: 10/1-8 118K | 10/8-15 150K | 10/15-22 147K (10/18 ETH sell 20; 10/21 QQQ s
 BTC 0.53, ETH 0.49, XAU swap 0.50, XAU perp 1.66, QQQ 2.47 (11/02 panel 0.019% -> 1.9bp), US500 2.58, HYPE 3.0, ENA 7.4, SOL 0.8, BNB 1.0, XAG 2.5, ZEC 3.0, NEAR 6, PONS 10, LIGHTER 5, WLD 5, ONDO 8, USELESS 8, OPENAI 10, CASHCAT 8, SUI 3, CRWV 5, GOOGL 4, ANTHROPIC 2.4 (11/02 panel 0.024%); default 6.
 Prior model (10/8-10/15 week, verified): points = a x displayed-spread$ + b x OI-time($M-wk), a = 0.055-0.06, b = 14.2-14.6 (swap OI x2 per owner, unverifiable; x1 variant too), intercept 0, market-independent.
 History of b: Aug ~35 (boost-inclusive display), 10/1-10/8 13.5 (acct3 trade-free), 10/8-10/15 14.2-14.6. The 10/21 BTC round trip ($7.93M, net 0) added only ~+4 pt vs the prior week -> volume is credited by spread, not by notional.
+
+## Addendum 2026-11-06 — fifth week (10/29 -> 11/05) and new snapshot
+- Points for 2026-10-29 to 2026-11-05: var1 185.335, var2 50.827 (owner, distributed 11/06).
+- New one-month exports (complete, verified by continuity): var_nov/data/var1_export_month_2026-11-06.csv (685 rows, 10/07T18:14Z .. 11/05T23:34Z) and
+  var_nov/data/var2_export_month_2026-11-06.csv (72 rows, 10/09 .. 11/01T10:55Z; var2 made NO trades after 11/01). Union all exports by id (var*_month.csv, oct15 acct*.csv).
+- Position snapshot 2026-11-06T02:40Z (11:39 KST):
+  var1 (15, portfolio $627,796): ETH +1519.61541 @2239.03 | BTC -39.472063 @76037.58 | QQQ -1754.602 @657.454 | US500 +746.0067 @737.001 | XAU swap +122.48962 @4068.57 | XAU perp -63.86928 @4070.96 |
+    SOL -700 @90.1483 | ZEC +33.95171 @1310.93 | CRWV +414.543 @45.3263 | ENA +83333.3 @0.1638 | CASHCAT +114862.8 @0.09321 | OPENAI +6.50818 @1333.73 | ANTHROPIC +5.22195 @1508.66 | USELESS +55968.5 @0.1287 | PONS +31839.1 @0.1858 (GOOGL closed).
+  var2 (6, portfolio $154,807): ETH -312.66472 @2236.29 | BTC +8.627308 @75949.54 | US500 -594.5698 @736.404 | QQQ +640.8645 @656.778 | XAU swap +68.36556 @4066.93 | XAU perp -62.97051 @4069.60 (unchanged since 11/01).
+  Backward walk 11/06 -> 11/02 snapshot matches exactly for both accounts.
+- Quick pass (a = 0.055, 15-min grid, price = last own fill else 11/06 mark): week 10/29: var1 OI-time 9.02 (x2) / 8.55 (x1) $M-wk, volume $5.01M, displayed-spread $525, b = 17.4 (x2) / 18.3 (x1); var2 OI-time 2.50 / 2.28, volume $1.72M, cost $224, b = 15.4 / 16.9.
+  The exact two-account solve for this week gives a = -0.007, b = 21.0 (inadmissible): at a = 0 both accounts give b = 20.3-20.6, at a = 0.055 they split 17.4 vs 15.4. Earlier weeks (a = 0.055, x2): var1 14.4 / 14.5 / 14.3 / 12.3, var2 15.5 / 15.4 / 13.4 / 26.7.
+- Hypotheses to test: (H1) b varies week to week (pool-share: fixed weekly pool divided by platform activity) with a fixed ~0.055; (H2) the spread credit a changed (toward 0) and b rose this week; (H3) a one-off/boost on one account; (H4) the spread-cost table overstates var1's cost this week (RWA spreads tighter: QQQ panel 0.019%, XAU perp panel 0.015% on 11/06).
